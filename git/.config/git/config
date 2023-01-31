@@ -1,0 +1,24 @@
+# Global git configuration
+#
+# since git uses bash $XDG_CONFIG_HOME is not set
+# so, use the long version of the path and update it accordingly.
+#
+# 1) create the following files:
+#   - ~/.config/git/git-personal.conf
+#   - ~/.config/git/git-work.conf
+#
+# 2) fill them with the following content:
+# ```
+# [user]
+#   name=
+#   email=
+# ```
+#
+[include]
+  path=~/.config/git/git-personal.conf
+
+[includeIf "gitdir:~/work/"]
+  path=~/.config/git/git-work.conf
+
+[init]
+	defaultBranch = main

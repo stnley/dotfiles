@@ -1,0 +1,9 @@
+[Unit]
+Description=A job to check if the battery is low
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/battery-status
+
+[Install]
+WantedBy=default.target

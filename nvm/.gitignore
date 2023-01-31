@@ -1,0 +1,12 @@
+*
+/*
+
+!.gitignore
+
+!.local
+.local/*
+!.local/share
+.local/share/*
+!.local/share/nvm/
+.local/share/nvm/*
+!.local/share/nvm/default-packages

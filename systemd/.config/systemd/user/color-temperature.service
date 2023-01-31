@@ -1,0 +1,9 @@
+[Unit]
+Description=A job to set the screen color temperature
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/color-temperature
+
+[Install]
+WantedBy=default.target

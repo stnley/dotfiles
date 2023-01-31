@@ -1,0 +1,43 @@
+{
+  "colors": {
+    "gray0": 233,
+    "gray1": 235,
+    "gray2": 236,
+    "gray3": 239,
+    "gray4": 240,
+    "gray5": 241,
+    "gray6": 244,
+    "gray7": 245,
+    "gray8": 247,
+    "gray9": 250,
+    "gray10": 252,
+
+    "gray11": 234,
+    "gray90": 254,
+
+    "gray70": [249, "b3b3b3"],
+
+    "dracula:white": [255, "F8F8F8"],
+    "dracula:foreground": [254, "F8F8F2"],
+    "dracula:background": [16, "282A36"],
+    "dracula:black": [0, "000000"],
+    "dracula:dkgray": [8, "4D4D4D"],
+    "dracula:red": [1, "FF5555"],
+    "dracula:ltred": [9, "FF6E67"],
+    "dracula:green": [2, "50FA7B"],
+    "dracula:ltgreen": [10, "5AF78E"],
+    "dracula:yellow": [3, "F1FA8C"],
+    "dracula:ltyellow": [11, "F4F99D"],
+    "dracula:purple": [4, "BD93F9"],
+    "dracula:ltpurple": [12, "CAA9FA"],
+    "dracula:pink": [5, "FF79C6"],
+    "dracula:ltpink": [13, "FF92D0"],
+    "dracula:cyan": [6, "8BE9FD"],
+    "dracula:ltcyan": [14, "9AEDFE"],
+    "dracula:gray": [7, "BFBFBF"],
+    "dracula:ltgray": [15, "E6E6E6"],
+    "dracula:comment": [17, "6272A4"],
+    "dracula:orange": [18, "FFB86C"],
+    "dracula:current": [19, "44475A"]
+  }
+}

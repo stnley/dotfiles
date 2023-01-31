@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# change-brightness
+
+current_brightness() {
+	cat "/sys/class/backlight/acpi_video0/brightness"
+}
+
+max_brightness() {
+	cat "/sys/class/backlight/acpi_video0/max_brightness"
+}
+
+change_brightness() {
+	echo "$1" >"/sys/class/backlight/acpi_video0/brightness"
+}
+
+send_notification() {
+	verb=$1
+	notify-send \
+		-u low \
+		-t 1500 \
+		--h string:x-canonical-private-synchronous:change-brightness \
+		-h int:value:"$(($(current) * 100 / $(max)))" \
+		-h string:hlcolor:#8bd9fd \
+		"Brightness $verb."
+}
+
+case $1 in
+up)
+	change_brightness $(($(current) + 1))
+	send_notification increased
+	;;
+down)
+	change_brightness $(($(current) - 1))
+	send_notification decreased
+	;;
+esac
+
+# vim: ts=2 sw=2 et:

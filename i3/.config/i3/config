@@ -1,0 +1,176 @@
+# gaps {{{
+#-----------------------
+for_window [class="^.*"] border pixel 2
+
+# }}}
+
+# modifier key {{{
+#-----------------------
+set $mod Mod1
+set $sup Mod4
+# }}}
+
+# workspaces {{{
+#-----------------------
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+# }}}
+
+# navigation {{{
+#-----------------------
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# }}}
+
+# window behavior {{{
+#-----------------------
+bindsym $mod+b split h
+bindsym $mod+v split v
+
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym $mod+f fullscreen toggle
+bindsym $sup+space floating toggle
+bindsym $sup+Shift+space focus mode_toggle
+# zoom client uses this keybind and can't be changed
+# bindsym $mod+a focus parent
+
+floating_modifier $mod
+
+bindsym $mod+Shift+q kill
+# }}}
+
+# resize mode {{{
+#-----------------------
+bindsym $mod+r mode "resize"
+mode "resize" {
+  bindsym h resize shrink width 10 px or 10 ppt
+  bindsym j resize grow height 10 px or 10 ppt
+  bindsym k resize shrink height 10 px or 10 ppt
+  bindsym l resize grow width 10 px or 10 ppt
+
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+r mode "default"
+}
+# }}}
+
+# looks {{{
+#-----------------------
+# class                 border  bground text    indicator child_border
+client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4
+client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #44475A
+client.unfocused        #44475A #44475A #F8F8F2 #44475A   #44475A
+client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
+client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
+client.background       #F8F8F2
+# }}}
+
+# bar {{{
+#-----------------------
+bar {
+  status_command i3status
+  position top
+  font pango:JetBrainsMono Nerd Font Mono 10
+  colors {
+    background #282A36
+    statusline #F8F8F2
+    separator  #44475A
+    focused_workspace  #44475A #44475A #F8F8F2
+    active_workspace   #282A36 #44475A #F8F8F2
+    inactive_workspace #282A36 #282A36 #BFBFBF
+    urgent_workspace   #FF5555 #FF5555 #F8F8F2
+    binding_mode       #FF5555 #FF5555 #F8F8F2
+  }
+}
+# }}}
+
+# custom keys {{{
+#-----------------------
+bindsym $mod+Return exec alacritty
+bindsym $mod+space exec "dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'JetBrainsMono Nerd Font Mono-12' -p 'dmenu%'"
+
+# audio control w media keys
+bindsym XF86AudioRaiseVolume exec --no-startup-id change-volume up
+bindsym XF86AudioLowerVolume exec --no-startup-id change-volume down
+bindsym XF86AudioMute exec --no-startup-id change-volume mute
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# audio control w/o media keys
+bindsym $mod+F12 exec --no-startup-id change-volume up
+bindsym $mod+F11 exec --no-startup-id change-volume down
+bindsym $mod+F10 exec --no-startup-id change-volume mute
+bindsym $mod+F9 exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# brightness control
+bindsym XF86MonBrightnessUp exec --no-startup-id change-brightness up
+bindsym XF86MonBrightnessDown exec --no-startup-id change-brightness down
+
+# scratchpad
+bindsym $mod+Shift+y scratchpad show
+# }}}
+
+# application workspaces {{{
+#-----------------------
+for_window [class="KeePassXC"] move scratchpad
+assign [class="Alacritty"] $ws1
+assign [class="XTerm"] $ws1
+# this doesn't swallow firefox profile selection popup
+assign [class="firefox" instance="Navigator"] $ws2
+assign [class="Slack"] $ws3
+assign [class="zoom"] $ws4
+# spotify client is broken so must use for_window
+for_window [class="^Spotify"] move to workspace $ws10
+for_window [instance="scratchpad"] move scratchpad
+# }}}
+
+# vim: fdm=marker ts=2 sw=2 et:

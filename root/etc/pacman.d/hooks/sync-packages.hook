@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Save package list
+Exec = /usr/local/bin/sync-packages
+When = PostTransaction
+Depends = python
+Depends = python-yaml

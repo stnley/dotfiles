@@ -1,0 +1,12 @@
+[Unit]
+Description=Check for updates every hour
+RefuseManualStart=no
+RefuseManualStop=no
+
+[Timer]
+OnBootSec=300
+OnUnitActiveSec=3600
+Unit=check-updates.service
+
+[Install]
+WantedBy=timers.target

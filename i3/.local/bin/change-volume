@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# change-volume
+# adapted from https://github.com/mohabaks
+
+# return mute as boolean
+get_mute() {
+	percentage=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '/Mute/ {print $2; exit}')
+	case $percentage in
+	no)
+		echo 0
+		;;
+	yes)
+		echo 1
+		;;
+	esac
+}
+
+# return volume as number (no percent sign)
+get_volume() {
+	percentage=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '/Volume/ {print $5; exit}')
+	echo ${percentage%\%}
+}
+
+send_notification() {
+	verb=$1
+	volume=$(get_volume)
+	echo $volume
+	notify-send \
+		-u low \
+		-t 1500 \
+		-h string:x-canonical-private-synchronous:change-volume \
+		-h int:value:"$volume" \
+		-h string:hlcolor:#50fa7b \
+		"Volume $verb."
+}
+
+case $1 in
+up)
+	pactl set-sink-volume @DEFAULT_SINK@ +5%
+	send_notification increased
+	;;
+down)
+	pactl set-sink-volume @DEFAULT_SINK@ -5%
+	send_notification decreased
+	;;
+mute)
+	pactl set-sink-mute @DEFAULT_SINK@ toggle
+	if [ $(get_mute) -eq 0 ]; then
+		send_notification unmuted
+	elif [ $(get_mute) -eq 1 ]; then
+		send_notification muted
+	fi
+	;;
+esac
+
+# vim: ts=2 sw=2 et:

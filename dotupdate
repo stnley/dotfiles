@@ -1,0 +1,66 @@
+#!/usr/bin/env zsh
+#
+# Use GNU stow to manage symlinks for dotfiles.
+# Dotfiles are always installed from $DOTFILES to $HOME, except for the package 'root' which is installed to '/'
+
+# Usage documented below
+help() {
+    cat << 'EOF'
+usage: dotupdate [<option>]
+
+default:
+  <no option>   link all dotfiles
+options:
+  -D            unlink all dotfiles
+  -h            show this message, then exit
+EOF
+}
+
+typeset -r stow_dir="$DOTFILES"
+declare -a stow_options
+
+# always be verbose
+stow_options=("-v")
+
+# main function
+update_dots() {
+  if [[ -z $stow_dir ]]; then
+    >&2 printf "unable to determine dotfiles directory, update failed\n"
+    exit 1
+  fi
+
+  pushd "$stow_dir" || exit
+
+  for package in "$stow_dir"/*/; do
+    if [[ $(basename "$package") == "root" ]]; then
+      sudo stow "${stow_options[@]}" -t / "$(basename "$package")"
+    else
+      stow "${stow_options[@]}" -t "$HOME" "$(basename "$package")"
+    fi
+  done
+
+  popd || exit
+}
+
+# main loop
+while getopts ":Dh" opt; do
+  case $opt in
+    D)
+      stow_options+=("-D")
+      ;;
+    h)
+      help
+      exit 0
+      ;;
+    *)
+      >&2 printf "$(basename "$0"): invalid option: -%s\n" "$OPTARG"
+      >&2 printf "try '%s --help' for more information\n\n" "$(basename "$0")"
+      usage >&2
+      exit 1
+      ;;
+  esac
+done
+
+update_dots
+
+# vim: ts=2 sw=2 et:

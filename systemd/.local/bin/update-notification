@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# send notification with number of updates available
+
+if ! [ $(command -v checkupdates) ]; then
+	printf "pacman-contrib not installed" >&2
+	exit 1
+fi
+
+num_updates=$(checkupdates | wc -l)
+
+if [ $num_updates -gt 0 ]; then
+	notify-send -u normal "$num_updates updates available"
+fi
+
+# vim: ts=2 sw=2 et:

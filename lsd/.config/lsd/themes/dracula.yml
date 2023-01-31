@@ -1,0 +1,39 @@
+# Dracula colors
+#
+#  59 - Background
+#  60 - Current Line
+# 231 - Foreground
+# 103 - Comment
+# 147 - Comment (approx 20% lighter)
+# 159 - Cyan
+# 120 - Green
+# 222 - Orange
+# 212 - Pink
+# 183 - Purple
+# 210 - Red
+# 229 - Yellow
+#
+user: 159
+group: 231
+permission:
+  read: 183
+  write: 212
+  exec: 159
+  exec-sticky: 222
+  no-access: 210
+date:
+  hour-old: 147
+  day-old: 103
+  older: 60
+size:
+  none: 231
+  small: 120
+  medium: 222
+  large: 210
+inode: # not working
+  valid: 231
+  invalid: 210
+links: # not working
+  valid: 159
+  invalid: 210
+tree-edge: 60

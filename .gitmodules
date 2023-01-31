@@ -1,0 +1,18 @@
+[submodule "zsh/.config/zsh/prompt"]
+	path = zsh/.config/zsh/prompt
+	url = https://github.com/sindresorhus/pure.git
+[submodule "zsh/.config/zsh/zsh-autosuggestions"]
+	path = zsh/.config/zsh/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "zsh/.config/zsh/zsh-syntax-highlighting"]
+	path = zsh/.config/zsh/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "zsh/.config/zsh/syntax-theme"]
+	path = zsh/.config/zsh/syntax-theme
+	url = https://github.com/dracula/zsh-syntax-highlighting.git
+[submodule "themes/.themes/Dracula"]
+	path = themes/.themes/Dracula
+	url = https://github.com/dracula/gtk.git
+[submodule "themes/.icons/Dracula"]
+	path = themes/.icons/Dracula
+	url = https://github.com/matheuuus/dracula-icons.git

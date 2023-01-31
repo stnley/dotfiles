@@ -1,0 +1,83 @@
+{
+  "groups": {
+    "active_window_status": {
+      "fg": "dracula:yellow",
+      "bg": "dracula:current",
+      "attrs": []
+    },
+
+    "activity_status": {
+      "fg": "dracula:red",
+      "bg": "dracula:red",
+      "attrs": []
+    },
+
+    "background": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:current",
+      "attrs": []
+    },
+
+    "bell_status": {
+      "fg": "dracula:red",
+      "bg": "dracula:red",
+      "attrs": []
+    },
+
+    "date": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:comment",
+      "attrs": []
+    },
+
+    "session": {
+      "fg": "dracula:background",
+      "bg": "dracula:purple",
+      "attrs": ["bold"]
+    },
+
+    "session:prefix": {
+      "fg": "dracula:background",
+      "bg": "dracula:orange",
+      "attrs": ["bold"]
+    },
+
+    "time": {
+      "fg": "dracula:background",
+      "bg": "dracula:purple",
+      "attrs": ["bold"]
+    },
+
+    "time:divider": { "fg": "dracula:red", "bg": "dracula:red", "attrs": [] },
+
+    "window": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:current",
+      "attrs": []
+    },
+
+    "window:current": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:comment",
+      "attrs": []
+    },
+
+    "window:divider": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:current",
+      "attrs": []
+    },
+
+    "window_name": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:comment",
+      "attrs": ["bold"]
+    },
+
+    "window_status": {
+      "fg": "dracula:foreground",
+      "bg": "dracula:current",
+      "attrs": []
+    }
+  }
+}

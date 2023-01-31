@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+
+import pathlib
+import shutil
+import socket
+import subprocess
+import sys
+from typing import Dict, List, Set
+
+import yaml
+
+DISTRO = "arch"
+ME = "stnley"
+PACKAGE_FILE_HEADER = (
+    "# THIS FILE WAS GENERATED AUTOMATICALLY. DO NOT UPDATE DIRECTLY.\n\n"
+)
+PACKAGE_FILE_DIR = pathlib.PosixPath(f"/home/{ME}/.local/share/pacman")
+PACKAGE_FILE_NAME = f"{DISTRO}.packages.yaml"
+
+PackageData = Dict[str, Dict[str, List[str]]]
+
+
+class Pacman:
+    def repo_packages(self) -> Set[str]:
+        return set(
+            subprocess.run(
+                ["pacman", "-Qqe"], capture_output=True, check=True, text=True
+            ).stdout.splitlines()
+        )
+
+    def aur_packages(self) -> Set[str]:
+        return set(
+            subprocess.run(
+                ["pacman", "-Qqem"], capture_output=True, check=True, text=True
+            ).stdout.splitlines()
+        )
+
+
+def get_package_data() -> PackageData | None:
+    pm = Pacman()
+    repo_packages = pm.repo_packages()
+    aur_packages = pm.aur_packages()
+
+    # aur packages are reported from `pacman -Qqe`
+    repo_packages -= aur_packages
+
+    package_data: PackageData = {DISTRO: dict()}
+
+    if len(repo_packages) > 0:
+        package_data[DISTRO]["official"] = sorted(repo_packages)
+
+    if len(aur_packages) > 0:
+        package_data[DISTRO]["aur"] = sorted(aur_packages)
+
+    if not package_data[DISTRO]:
+        return None
+
+    return package_data
+
+
+# Workaround for yaml output to older format.
+# Don't want prettier to change it every time I open the file.
+# https://github.com/yaml/pyyaml/issues/234
+class Dumper(yaml.Dumper):
+    def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
+        return super().increase_indent(flow=flow, indentless=False)  # type: ignore
+
+
+def write_package_file(path: pathlib.Path, packages: PackageData) -> None:
+    with path.open("w") as file:
+        file.write(PACKAGE_FILE_HEADER)
+        yaml.dump(
+            packages, file, Dumper=Dumper, sort_keys=False, default_flow_style=False
+        )
+
+
+def main() -> None:
+    package_data = get_package_data()
+    if not package_data:
+        sys.exit(0)
+
+    sys.stdout.write("Saving package list\n")
+
+    if not PACKAGE_FILE_DIR.exists():
+        PACKAGE_FILE_DIR.mkdir()
+    shutil.chown(PACKAGE_FILE_DIR, ME, ME)
+
+    package_file_path = PACKAGE_FILE_DIR.joinpath(PACKAGE_FILE_NAME)
+
+    write_package_file(package_file_path, package_data)
+    shutil.chown(package_file_path, ME, ME)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# change color temperature with sct based on the hour
+
+current_hour=$(date +%H)
+
+case $current_hour in
+# 0000--0700 late-night/early-morning
+[0][0-7]) sct 2000 ;;
+
+# 0800-0900 morning
+[0][8-9]) sct 4500 ;;
+
+# 2000-2100 evening
+[2][0-1]) sct 4500 ;;
+
+# 2200-2400 night
+[2][2-3]) sct 2000 ;;
+
+# 1000-2000 normal temp
+*) sct ;;
+esac
+
+# vim: ts=2 sw=2 et:

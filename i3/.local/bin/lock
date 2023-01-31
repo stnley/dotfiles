@@ -1,0 +1,43 @@
+#!/bin/sh
+
+lock_command() {
+	blank='#282a36'
+	clear=$blank
+	default='#6272a4'
+	text='#f8f8f2'
+	wrong='#ff5555'
+	verifying='#ff5555'
+
+	i3lock \
+		--nofork \
+		--ignore-empty-password \
+		\
+		--insidever-color=$clear \
+		--ringver-color=$verifying \
+		\
+		--insidewrong-color=$clear \
+		--ringwrong-color=$wrong \
+		\
+		--inside-color=$blank \
+		--ring-color=$default \
+		--line-color=$blank \
+		--separator-color=$default \
+		\
+		--verif-color=$text \
+		--wrong-color=$text \
+		--time-color=$text \
+		--date-color=$text \
+		--layout-color=$text \
+		--keyhl-color=$wrong \
+		--bshl-color=$wrong \
+		\
+		--blur 10 \
+		--clock \
+		--indicator \
+		--time-str="%H:%M:%S" \
+		--date-str="%A, %Y-%m-%d"
+}
+
+killall -SIGUSR1 dunst && $(lock_command) && killall -SIGUSR2 dunst
+
+# vim: ts=2 sw=2 et:

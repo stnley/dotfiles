@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# adapted from https://github.com/mohabaks
+
+if [ -e "/sys/class/power_supply/BAT0" ]; then
+	battery_state=$(cat "/sys/class/power_supply/BAT0/status")
+	battery_power=$(cat "/sys/class/power_supply/BAT0/capacity")
+
+	if [ "$battery_state" = "Discharging" ] && [ $battery_power -le 20 ]; then
+		notify-send -u critical -t 60000 " BATTERY LOW "
+	elif [ "$battery_state" = "Charging" ] && [ $battery_power -eq 100 ]; then
+		notify-send -u normal " BATTERY FULL "
+	fi
+fi
+
+# vim: ts=2 sw=2 et:

@@ -1,0 +1,12 @@
+[Unit]
+Description=Set color temperature every 10 minutes
+RefuseManualStart=no
+RefuseManualStop=no
+
+[Timer]
+OnBootSec=120
+OnUnitActiveSec=600
+Unit=color-temperature.service
+
+[Install]
+WantedBy=timers.target

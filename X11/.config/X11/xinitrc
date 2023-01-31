@@ -1,0 +1,36 @@
+#!/bin/sh
+
+userresources=$XDG_CONFIG_HOME/X11/xresources
+
+# merge in defaults and keymaps
+
+if [ -f "$userresources" ]; then
+	xrdb -merge "$userresources"
+fi
+
+# don't turn off the screen/monitor power
+xset s off -dpms
+
+# start some nice programs
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+	for f in /etc/X11/xinit/xinitrc.d/?*.sh; do
+		[ -x "$f" ] && . "$f"
+	done
+	unset f
+fi
+
+# startup apps
+eval $(gnome-keyring-daemon --start --components=secrets,ssh)
+export SSH_AUTH_SOCK
+udiskie --smart-tray &
+nm-applet &
+nextcloud &
+blueman-applet &
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+feh --no-fehbg --bg-fill ~/personal/pictures/backgrounds/rainbow.png &
+keepassxc &
+spotify &
+
+exec i3
+
+# vim: ts=2 sw=2 et:

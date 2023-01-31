@@ -1,0 +1,5 @@
+#!/bin/sh
+
+pkexec tailscale down && systemctl stop tailscaled.service
+
+# vim: ts=2 sw=2 et:
