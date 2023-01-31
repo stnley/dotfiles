@@ -19,19 +19,19 @@ send_notification() {
 	notify-send \
 		-u low \
 		-t 1500 \
-		--h string:x-canonical-private-synchronous:change-brightness \
-		-h int:value:"$(($(current) * 100 / $(max)))" \
+		-h string:x-canonical-private-synchronous:change-brightness \
+		-h int:value:"$(($(current_brightness) * 100 / $(max_brightness)))" \
 		-h string:hlcolor:#8bd9fd \
 		"Brightness $verb."
 }
 
 case $1 in
 up)
-	change_brightness $(($(current) + 1))
+	change_brightness $(($(current_brightness) + 1))
 	send_notification increased
 	;;
 down)
-	change_brightness $(($(current) - 1))
+	change_brightness $(($(current_brightness) - 1))
 	send_notification decreased
 	;;
 esac
