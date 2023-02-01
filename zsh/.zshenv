@@ -32,10 +32,6 @@ export VISUAL="$EDITOR"
 #-----------------------
 export GOPATH="$XDG_DATA_HOME/go"
 export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
-# export GOROOT="$XDG_DATA_HOME/go
-# export GOPATH="$HOME/personal/development/go"
-# export GOBIN="$GOPATH/bin"
-# export GOCACHE="$XDG_CACHE_HOME/go-build"
 # }}}
 
 # gpg {{{
