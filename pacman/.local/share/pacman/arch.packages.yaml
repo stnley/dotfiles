@@ -13,6 +13,7 @@ arch:
     - bluez-utils
     - clang
     - debugedit
+    - delve
     - discord
     - dmenu
     - docker
@@ -103,7 +104,9 @@ arch:
     - qemu-desktop
     - ranger
     - ripgrep
+    - screen
     - scrot
+    - shfmt
     - staticcheck
     - stow
     - stylua
@@ -134,6 +137,7 @@ arch:
     - zip
     - zsh
   aur:
+    - docker-credential-secretservice-bin
     - efm-langserver
     - i3lock-color
     - jdtls
