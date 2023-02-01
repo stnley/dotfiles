@@ -6,4 +6,4 @@ Type=simple
 ExecStart=%h/.local/bin/color-temperature
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical.target
