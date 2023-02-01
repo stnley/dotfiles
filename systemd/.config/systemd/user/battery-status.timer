@@ -6,7 +6,7 @@ RefuseManualStop=no
 [Timer]
 OnBootSec=120
 OnUnitActiveSec=300
-Unit=batter-status.service
+Unit=battery-status.service
 
 [Install]
 WantedBy=timers.target
