@@ -2,9 +2,6 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -iv'
 
-# alias g='git'
-# compdef g='git'
-
 if [ -x $(command -v "lsd") ]; then
     alias ls="lsd --config-file $XDG_CONFIG_HOME/lsd/config.yml"
     alias ll='ls --blocks=permission,size,date,name'
