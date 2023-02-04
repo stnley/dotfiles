@@ -79,6 +79,27 @@ local staticcheck = {
   lintSource = "staticcheck",
 }
 
+local google_java_format = {
+  formatCommand = "google-java-format -",
+  formatStdin = true,
+}
+
+-- TODO: can this be made dynamic?
+-- check to see if checkstyle config exists, then fallback to google?
+-- create input, get path for checkstyle config (complete w paths from cwd)
+local checkstyle = {
+  lintCommand = "checkstyle -c google_checks.xml ${INPUT}",
+  lintIgnoreExitCode = true,
+  lintFormats = {
+    "[%tRROR]\\ %f:%l:%c:\\ %m",
+    "[%tRROR]\\ %f:%l:\\ %m",
+    "[%tARN]\\ %f:%l:%c:\\ %m",
+    "[%tARN]\\ %f:%l:\\ %m",
+  },
+  lintSource = "checkstyle",
+}
+
+M.java = { google_java_format, checkstyle }
 M.json = { prettier }
 M.jsonc = { prettier }
 M.lua = { stylua }

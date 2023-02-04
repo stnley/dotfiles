@@ -64,6 +64,8 @@ return require("packer").startup({
       },
     })
 
+    use({ "mfussenegger/nvim-jdtls", module = "jdtls" })
+
     -- completion
     use({
       "hrsh7th/nvim-cmp",

@@ -7,16 +7,14 @@ local autocmd = require("stnley.lsp.autocmd")
 local formatters = require("stnley.lsp.efm")
 local keymap = require("stnley.keymap")
 
+local M = {}
+
 local function disable_semantic_tokens(client)
   client.server_capabilities.semanticTokensProvider = nil
 end
 
 local function inlay_hints(client, bufnr)
   ih.on_attach(client, bufnr)
-end
-
-local function custom_init(client)
-  client.config.flags = client.config.flags or {}
 end
 
 local function highlight_on_hover(client)
@@ -41,26 +39,68 @@ local function lsp_keymaps(bufnr)
   local nmap = keymap.nmap
   local nnoremap = keymap.nnoremap
 
-  -- stylua: ignore start
-  nmap("<leader>gd", function() require("trouble").toggle("lsp_definitions") end, { desc = "LSP: [G]o to [D]efinition", buffer = bufnr })
-  nmap("<leader>gD", vim.lsp.buf.declaration, { desc = "LSP: [G]o to [D]eclaration", buffer = bufnr })
-  nmap("<leader>gi", vim.lsp.buf.implementation, { desc = "LSP: [G]o to [I]mplementation", buffer = bufnr })
-  nmap("<leader>gs", vim.lsp.buf.signature_help, { desc = "LSP: [G]et [S]ignature help", buffer = bufnr })
-  nmap("<leader>ca", vim.lsp.buf.code_action, { desc = "LSP: [C]ode [A]ction", buffer = bufnr })
-  nmap("<leader>gr", function() require("telescope.builtin").lsp_references({ layout_strategy = "vertical" }) end, { desc = "LSP: [G]o to [R]eferences", buffer = bufnr })
-  nmap("<leader>rn", vim.lsp.buf.rename, { desc = "LSP: [R]e[N]ame", buffer = bufnr })
-  nmap("K", vim.lsp.buf.hover, { desc = "LSP: hover documentation", buffer = bufnr })
-  nmap("<leader>td", vim.lsp.buf.type_definition, { desc = "LSP: [T]ype [D]efinition", buffer = bufnr })
-  nmap("<leader>sd", vim.diagnostic.open_float, { desc = "LSP: [S]how [D]iagnostic", buffer = bufnr })
-  nnoremap("<leader>q", vim.diagnostic.setloclist, { desc = "LSP: set location list from diagnostics", buffer = bufnr })
-  nnoremap("[d", vim.diagnostic.goto_prev, { desc = "LSP: previous diagnostic", buffer = bufnr })
-  nnoremap("]d", vim.diagnostic.goto_next, { desc = "LSP: next diagnostic", buffer = bufnr })
-  nnoremap("<leader>so", function() require("symbols-outline").toggle_outline() end, { desc = "LSP: [S]ymbol [O]utline", buffer = bufnr })
-  nnoremap("<leader>xx", function() require("trouble").toggle("workspace_diagnostics") end, { desc = "LSP: workspace diagnostics", buffer = bufnr })
+    -- stylua: ignore start
+    nmap("<leader>gd", function() require("trouble").toggle("lsp_definitions") end,
+        { desc = "LSP: [G]o to [D]efinition", buffer = bufnr })
+    nmap("<leader>gD", vim.lsp.buf.declaration, { desc = "LSP: [G]o to [D]eclaration", buffer = bufnr })
+    nmap("<leader>gi", vim.lsp.buf.implementation, { desc = "LSP: [G]o to [I]mplementation", buffer = bufnr })
+    nmap("<leader>gs", vim.lsp.buf.signature_help, { desc = "LSP: [G]et [S]ignature help", buffer = bufnr })
+    nmap("<leader>ca", vim.lsp.buf.code_action, { desc = "LSP: [C]ode [A]ction", buffer = bufnr })
+    nmap("<leader>gr", function() require("telescope.builtin").lsp_references({ layout_strategy = "vertical" }) end,
+        { desc = "LSP: [G]o to [R]eferences", buffer = bufnr })
+    nmap("<leader>rn", vim.lsp.buf.rename, { desc = "LSP: [R]e[N]ame", buffer = bufnr })
+    nmap("K", vim.lsp.buf.hover, { desc = "LSP: hover documentation", buffer = bufnr })
+    nmap("<leader>td", vim.lsp.buf.type_definition, { desc = "LSP: [T]ype [D]efinition", buffer = bufnr })
+    nmap("<leader>sd", vim.diagnostic.open_float, { desc = "LSP: [S]how [D]iagnostic", buffer = bufnr })
+    nnoremap("<leader>q", vim.diagnostic.setloclist, { desc = "LSP: set location list from diagnostics", buffer = bufnr })
+    nnoremap("[d", vim.diagnostic.goto_prev, { desc = "LSP: previous diagnostic", buffer = bufnr })
+    nnoremap("]d", vim.diagnostic.goto_next, { desc = "LSP: next diagnostic", buffer = bufnr })
+    nnoremap("<leader>so", function() require("symbols-outline").toggle_outline() end,
+        { desc = "LSP: [S]ymbol [O]utline", buffer = bufnr })
+    nnoremap("<leader>xx", function() require("trouble").toggle("workspace_diagnostics") end,
+        { desc = "LSP: workspace diagnostics", buffer = bufnr })
   -- stylua: ignore end
 end
 
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+M.capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+function M.on_init(client)
+  client.config.flags = client.config.flags or {}
+end
+
+-- generic on_attach function that sets up standard LSP features
+function M.on_attach(client, bufnr)
+  format_on_save(client, function(cl)
+    return not cl.config.disable_formatting
+  end)
+
+  if client.config.inlay_hints then
+    inlay_hints(client, bufnr)
+  end
+
+  lsp_keymaps(bufnr)
+  disable_semantic_tokens(client)
+  highlight_on_hover(client)
+  codelens(client)
+end
+
+-- setup LSP server with lspconfig configuration
+local function setup_server(server, config)
+  -- if server config defines their own on_attach, call it before common one
+  if config.on_attach then
+    local old_on_attach = config.on_attach
+    config.on_attach = function(client, bufnr)
+      old_on_attach(client, bufnr)
+      M.on_attach(client, bufnr)
+    end
+  else
+    config.on_attach = M.on_attach
+  end
+
+  config.on_init = config.on_init or M.on_init
+  config.capabilities = config.capabilities or M.capabilities
+  lspconfig[server].setup(config)
+end
 
 local servers = {
   bashls = {},
@@ -112,6 +152,7 @@ local servers = {
     settings = {
       Lua = {
         hint = { enable = true },
+        completion = { callSnippet = "Replace" },
         runtime = { version = "LuaJIT" },
         diagnostics = { globals = { "vim" } },
         workspace = { library = vim.api.nvim_get_runtime_file("", true) },
@@ -126,40 +167,10 @@ local servers = {
   yamlls = {},
 }
 
-local function setup_server(server, config)
-  local function common_on_attach(client, bufnr)
-    if not config.disable_formatting then
-      format_on_save(client, function(cl)
-        return not servers[cl.name].disable_formatting
-      end)
-    end
-
-    if config.inlay_hints then
-      inlay_hints(client, bufnr)
-    end
-
-    lsp_keymaps(bufnr)
-    disable_semantic_tokens(client)
-    highlight_on_hover(client)
-    codelens(client)
+do
+  for server, config in pairs(servers) do
+    setup_server(server, config)
   end
-
-  -- if server config defines their own on_attach, call it before common one
-  if config.on_attach then
-    local old_on_attach = config.on_attach
-    config.on_attach = function(client, bufnr)
-      old_on_attach(client, bufnr)
-      common_on_attach(client, bufnr)
-    end
-  else
-    config.on_attach = common_on_attach
-  end
-
-  config.on_init = custom_init
-  config.capabilities = capabilities
-  lspconfig[server].setup(config)
 end
 
-for server, config in pairs(servers) do
-  setup_server(server, config)
-end
+return M
