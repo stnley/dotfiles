@@ -16,6 +16,8 @@ vim.o.number = true -- show actual number of current line
 vim.o.relativenumber = true -- show relative line numbers
 vim.o.scrolloff = 8
 
+vim.o.numberwidth = 3
+vim.o.statuscolumn = "%=%{v:virtnum < 1 ? (v:relnum ? v:relnum : v:lnum) : ''}%=%s"
 vim.o.signcolumn = "yes"
 vim.o.splitright = true -- prefer windows split to right
 vim.o.splitbelow = true -- prefer windows split to bottom
