@@ -61,4 +61,4 @@ end
 dap_go.setup({})
 
 local venv = vim.fn.expand("$XDG_DATA_HOME") .. "/virtualenvs"
-dap_python.setup({ venv .. "/debugpy/bin/python" })
+dap_python.setup(venv .. "/debugpy/bin/python")
