@@ -2,7 +2,6 @@
 
 import pathlib
 import shutil
-import socket
 import subprocess
 import sys
 from typing import Dict, List, Set
@@ -78,8 +77,6 @@ def main() -> None:
     package_data = get_package_data()
     if not package_data:
         sys.exit(0)
-
-    sys.stdout.write("Saving package list\n")
 
     if not PACKAGE_FILE_DIR.exists():
         PACKAGE_FILE_DIR.mkdir()
