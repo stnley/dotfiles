@@ -43,6 +43,7 @@ arch:
     - intel-ucode
     - jdk-openjdk
     - jdk11-openjdk
+    - jdk17-openjdk
     - jdk8-openjdk
     - keepassxc
     - kitty
@@ -61,6 +62,7 @@ arch:
     - make
     - man-db
     - man-pages
+    - maven
     - neofetch
     - network-manager-applet
     - networkmanager
@@ -136,9 +138,12 @@ arch:
     - zathura-pdf-mupdf
     - zip
     - zsh
+    - zsh-completions
   aur:
+    - checkstyle
     - docker-credential-secretservice-bin
     - efm-langserver
+    - google-java-format
     - i3lock-color
     - jdtls
     - librewolf-bin

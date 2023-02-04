@@ -48,6 +48,12 @@ zstyle ':completion:*:*:*:*:messages' format '%F{purple}-- %d --%f'
 zstyle ':completion:*:*:*:*:warnings' format '%F{red}-- no matches found --%f'
 zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
 
+
+# TODO: this is the path for zsh-users completions on arch, make it generic for debian based distro
+if [[ -d "/usr/share/zsh/site-functions/" ]]; then
+  fpath=("/usr/share/zsh/site-functions/" $fpath)
+fi
+
 autoload -Uz compinit bashcompinit
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
 bashcompinit
