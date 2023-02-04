@@ -78,10 +78,16 @@ return require("packer").startup({
         { "hrsh7th/cmp-buffer" },
         { "hrsh7th/cmp-path" },
         {
-          "saadparwaiz1/cmp_luasnip",
+          "dcampos/cmp-snippy",
           requires = {
-            "L3MON4D3/LuaSnip",
-            module = "luasnip",
+            {
+              "dcampos/nvim-snippy",
+              config = function()
+                require("snippy").setup({})
+              end,
+              module = "snippy",
+            },
+            { "honza/vim-snippets" },
           },
         },
       },

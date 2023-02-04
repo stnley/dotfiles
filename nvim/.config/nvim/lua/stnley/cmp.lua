@@ -4,7 +4,7 @@ if not has_cmp then
   return
 end
 
-local luasnip = require("luasnip")
+local snippy = require("snippy")
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -42,7 +42,7 @@ local cmp_kinds = {
 local_cmp.setup({
   snippet = {
     expand = function(args)
-      luasnip.lsp_expand(args.body)
+      snippy.expand_snippet(args.body)
     end,
   },
   mapping = {
@@ -54,8 +54,8 @@ local_cmp.setup({
     ["<Tab>"] = local_cmp.mapping(function(fallback)
       if local_cmp.visible() then
         local_cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+      elseif snippy.can_expand_or_advance() then
+        snippy.expand_or_advance()
       elseif has_words_before() then
         local_cmp.complete()
       else
@@ -66,8 +66,8 @@ local_cmp.setup({
     ["<S-Tab>"] = local_cmp.mapping(function(fallback)
       if local_cmp.visible() then
         local_cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif snippy.can_jump(-1) then
+        snippy.previous()
       else
         fallback()
       end
@@ -78,7 +78,7 @@ local_cmp.setup({
   sources = {
     { name = "nvim_lsp" },
     { name = "nvim_lsp_signature_help" },
-    { name = "luasnip" },
+    { name = "snippy" },
     { name = "buffer" },
     { name = "path" },
   },
@@ -88,7 +88,7 @@ local_cmp.setup({
       vim_item.menu = ({
         nvim_lsp = "[LSP]",
         nvim_lua = "[Lua]",
-        luasnip = "[LuaSnip]",
+        snippy = "[Snippy]",
         buffer = "[Buffer]",
       })[entry.source.name]
       return vim_item
@@ -96,16 +96,14 @@ local_cmp.setup({
   },
   enabled = function()
     local context = require("cmp.config.context")
-    -- enable completion in command mode
-    if vim.api.nvim_get_mode().mode == "c" then
-      return true
-    -- disable completion in comments
-    elseif context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
-      return false
-    else
-      -- enable completion everywhere else
-      return true
-    end
+
+    local disabled = false
+    disabled = disabled or (vim.api.nvim_buf_get_option(0, "buftype") == "prompt")
+    disabled = disabled or (vim.fn.reg_recording() ~= "")
+    disabled = disabled or (vim.fn.reg_executing() ~= "")
+    disabled = disabled or context.in_treesitter_capture("comment")
+    disabled = disabled or context.in_syntax_group("Comment")
+    return not disabled
   end,
   experimental = {
     ghost_text = true,
