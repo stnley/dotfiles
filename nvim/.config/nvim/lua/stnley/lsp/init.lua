@@ -146,7 +146,7 @@ local servers = {
   html = { disable_formatting = true },
   jsonls = { disable_formatting = true },
   pyright = {},
-  sumneko_lua = {
+  lua_ls= {
     disable_formatting = true,
     inlay_hints = true,
     settings = {

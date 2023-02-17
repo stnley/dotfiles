@@ -4,7 +4,7 @@ local highlight_group = vim.api.nvim_create_augroup("lsp_highlights", {})
 local codelens_group = vim.api.nvim_create_augroup("lsp_codelens", {})
 local format_group = vim.api.nvim_create_augroup("lsp_formatting", {})
 
-M.highlight_on_hover = function()
+function M.highlight_on_hover()
   vim.api.nvim_clear_autocmds({ group = highlight_group })
   vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     group = highlight_group,
@@ -25,7 +25,7 @@ M.highlight_on_hover = function()
   })
 end
 
-M.codelens_refresh = function()
+function M.codelens_refresh()
   vim.api.nvim_clear_autocmds({ group = codelens_group })
   vim.api.nvim_create_autocmd("BufEnter", {
     group = codelens_group,
@@ -47,7 +47,7 @@ M.codelens_refresh = function()
   })
 end
 
-M.format_on_save = function(filter)
+function M.format_on_save(filter)
   vim.api.nvim_clear_autocmds({ group = format_group })
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = format_group,
