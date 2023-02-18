@@ -97,6 +97,7 @@ arch:
     - checkstyle
     - docker-credential-secretservice-bin
     - efm-langserver
+    - firmware-manager-git
     - google-java-format
     - i3lock-color
     - jdtls
@@ -108,7 +109,6 @@ arch:
     - spotify
     - system76-driver
     - system76-firmware
-    - system76-firmware-daemon
     - system76-power
     - terraform-ls
     - yay
